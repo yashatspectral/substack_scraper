@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase/supabaseClient";
 import { redirect } from 'next/navigation'
 import { LogoutButton } from '@/components/logout-button'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/client'
 
 interface StyleProfileResponse {
   style_prompt: string;
@@ -22,6 +22,17 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<StyleProfileResponse | null>(null);
+  const supabase = createClient()
+  const [email, setEmail] = useState<string | null>(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null))
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) =>
+      setEmail(session?.user?.email ?? null)
+    )
+    return () => listener.subscription.unsubscribe()
+  }, [supabase])
+
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -77,8 +88,8 @@ export default function HomePage() {
     <main>
       <div>
         <section>
-          <div className="flex justify-end px-4 py-4">
-            <p>Logged in as </p>
+          <div className="flex justify-between px-4 py-4">
+            <p className="text-slate-600">Hey there, {email ?? 'friend'}</p>
             <LogoutButton />
           </div>
           <div className="px-4 py-4 ">
