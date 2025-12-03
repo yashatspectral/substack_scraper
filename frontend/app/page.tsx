@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase/supabaseClient";
 import { redirect } from 'next/navigation'
 import { LogoutButton } from '@/components/logout-button'
 import { createClient } from '@/lib/supabase/client'
