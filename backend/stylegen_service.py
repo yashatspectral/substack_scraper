@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import List
 from urllib.parse import urlparse
 
+import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,6 +25,17 @@ load_dotenv(override=True)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BLOG_ROOT = REPO_ROOT / "blogs"
+
+# Work around httpx>=0.28 removing the `proxies` kwarg expected by openai==1.12.
+if "proxies" not in httpx.Client.__init__.__code__.co_varnames:
+    _orig_client_init = httpx.Client.__init__
+
+    def _patched_client_init(self, *args, proxies=None, proxy=None, **kwargs):
+        if proxies is not None and proxy is None:
+            proxy = proxies
+        return _orig_client_init(self, *args, proxy=proxy, **kwargs)
+
+    httpx.Client.__init__ = _patched_client_init  # type: ignore[assignment]
 
 
 class StyleProfileRequest(BaseModel):
@@ -54,11 +66,8 @@ app = FastAPI(title="StyleGen Prototype", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

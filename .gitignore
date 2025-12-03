@@ -6,3 +6,5 @@ backend/.env
 *.pyc
 frontend/node_modules/
 frontend/.next/
+.vercel
+.env*.local

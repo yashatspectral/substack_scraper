@@ -6,7 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
-
+import { supabase } from "@/lib/supabase/supabaseClient";
+import { redirect } from 'next/navigation'
+import { LogoutButton } from '@/components/logout-button'
+import { createClient } from '@/lib/supabase/server'
 
 interface StyleProfileResponse {
   style_prompt: string;
@@ -49,6 +52,17 @@ export default function HomePage() {
 
       const data = (await res.json()) as StyleProfileResponse;
       setResponse(data);
+
+      const { error: dbError } = await supabase.from("runs").insert([
+        {
+          substack_url: substackUrl
+        }
+      ]);
+
+      if (dbError) {
+        console.warn("Saved style profile but failed to log Supabase run:", dbError);
+      }
+
     } catch (err) {
       console.error(err);
       setError(
@@ -63,6 +77,10 @@ export default function HomePage() {
     <main>
       <div>
         <section>
+          <div className="flex justify-end px-4 py-4">
+            <p>Logged in as </p>
+            <LogoutButton />
+          </div>
           <div className="px-4 py-4 ">
             <h1 className="text-4xl text-center font-bold font-sans">
               Capture the voice of your favorite Substack.
