@@ -84,121 +84,132 @@ export default function HomePage() {
   }
 
   return (
-    <main>
-      <div>
-        <section>
-          <div className="flex justify-between px-4 py-4">
-            <p className="text-slate-600">Hey there, {email ?? 'friend'}</p>
-            <LogoutButton />
-          </div>
-          <div className="px-4 py-4 ">
-            <h1 className="text-4xl text-center font-bold font-sans">
-              Capture the voice of your favorite Substack.
-            </h1>
-            <div className="flex justify-center px-4 py-4">
-              <Image src="/Substack to Style Guide.png" alt="StyleGen Logo" width={800} height={600} quality={100} unoptimized={true} className="rounded-xl" />
-            </div>
-            <div>
-            <p className="text-lg text-center font-sans">
-              Paste any author&rsquo;s Substack and instantly receive a detailed
-              writing brief that mirrors their tone, pacing, and editorial guidelines.
-            </p>
-          </div>
-          </div>
-          
-          <div className="flex flex-col gap-4 px-4 py-4 max-w-3xl mx-auto">
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
-            >
-              <div className="sm:flex-1 sm:min-w-0">
-                <Input
-                  type="url"
-                  placeholder="https://author.substack.com"
-                  value={substackUrl}
-                  onChange={(event) => setSubstackUrl(event.target.value)}
-                />
-              </div>
-              <Button
-                type="submit"
-                className="shrink-0"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Generating…
-                  </>
-                ) : (
-                  "Generate"
-                )}
-              </Button>
-            </form>
-          </div>
-        </section>
-
-        <section className="w-full max-w-4xl">
-          {loading && (
-              <div className="rounded-3xl border border-slate-100 bg-white/80 p-8 shadow-lg">
-                <div className="flex items-center gap-3 text-slate-600">
-                  <Loader2 className="h-5 w-5 animate-spin text-indigo-500" />
-                  <span>Scraping recent posts and distilling the voice…</span>
-                </div>
-              </div>
-          )}
-
-          {response && (
-            <div className="flex flex-col gap-6">
-              <div className="rounded-3xl border border-slate-100 bg-white/90 p-8 shadow-lg">
-                <h2 className="mb-4 text-2xl font-semibold text-slate-900">
-                  Style Prompt
-                </h2>
-                <Textarea
-                  readOnly
-                  value={response.style_prompt}
-                  className="resize-none bg-slate-50/60 text-base leading-7 shadow-inner"
-                />
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="rounded-3xl border border-slate-100 bg-white/90 p-6 shadow-lg">
-                  <h3 className="mb-3 text-lg font-semibold text-slate-900">
-                    Quick Metrics
-                  </h3>
-                  <ul className="space-y-2 text-sm text-slate-600">
-                    {Object.entries(response.metrics).map(([key, value]) => (
-                      <li key={key} className="flex justify-between gap-3">
-                        <span className="font-medium capitalize">
-                          {key.replace(/_/g, " ")}
-                        </span>
-                        <span className="text-right">
-                          {Array.isArray(value) ? value.join(", ") : value}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="rounded-3xl border border-slate-100 bg-white/90 p-6 shadow-lg">
-                  <h3 className="mb-3 text-lg font-semibold text-slate-900">
-                    Samples Used
-                  </h3>
-                  <ul className="space-y-2 text-sm text-slate-600">
-                    {response.samples_used.map((sample) => (
-                      <li
-                        key={sample}
-                        className="rounded-full bg-slate-100 px-4 py-2 text-xs font-medium capitalize text-slate-700"
-                      >
-                        {sample.replace(/-/g, " ")}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          )}
-        </section>
+    <>
+      <div className="fixed inset-0 -z-10">
+        <Image
+          src="/login-bg-img.jpg"
+          alt="login bg"
+          fill
+          quality={100}
+          unoptimized
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/70" />
       </div>
-    </main>
+      <main className="relative z-10">
+        <div>
+          <section>
+            <div className="relative flex justify-between px-4 py-4">
+              <p className="text-white">Hey there, {email ?? "friend"}</p>
+              <LogoutButton />
+            </div>
+            <div className="relative px-4 py-4">
+              <h1 className="text-4xl text-center font-bold font-sans">
+                Capture the voice of your favorite Substack.
+              </h1>
+              <div>
+                <p className="text-lg text-center font-sans py-4">
+                  Paste any author&rsquo;s Substack and instantly receive a detailed
+                  writing brief that mirrors their tone, pacing, and editorial guidelines.
+                </p>
+              </div>
+            </div>
+
+            <div className="relative flex flex-col gap-4 px-4 py-4 max-w-3xl mx-auto">
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
+              >
+                <div className="sm:flex-1 sm:min-w-0">
+                  <Input
+                    type="url"
+                    placeholder="https://author.substack.com"
+                    className="text-white bg-transparent border-white placeholder:text-white focus-visible:ring-white/40"
+                    value={substackUrl}
+                    onChange={(event) => setSubstackUrl(event.target.value)}
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="shrink-0"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin text-green-500" />
+                      Generating…
+                    </>
+                  ) : (
+                    "Generate"
+                  )}
+                </Button>
+              </form>
+            </div>
+          </section>
+
+          <section className="relative w-full max-w-4xl mx-auto sm:px-6 p-8">
+            {loading && (
+              <div className="rounded-lg sm:rounded-xl border border-white/20 bg-white/10 p-4 sm:p-6 md:p-8 shadow-lg backdrop-blur-sm">
+                <div className="flex items-center gap-2 sm:gap-3 text-white/80 text-sm sm:text-base">
+                  <Loader2 className="h-5 w-5 animate-spin text-green-500" />
+                  <span>Scraping recent essays and distilling the voice…</span>
+                </div>
+              </div>
+            )}
+
+            {response && (
+              <div className="w-full rounded-xl sm:rounded-2xl border border-white/20 bg-white/10 p-4 sm:p-6 md:p-8 shadow-xl backdrop-blur-sm space-y-6 sm:space-y-8">
+                <div className="w-full">
+                  <h2 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-semibold text-white">
+                    Style Prompt
+                  </h2>
+                  <Textarea
+                    readOnly
+                    value={response.style_prompt}
+                    className="w-full min-h-[200px] sm:min-h-[240px] rounded-lg sm:rounded-xl bg-white/5 text-sm sm:text-base leading-6 sm:leading-7 text-white/90 p-3 sm:p-4"
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+                  <div className="rounded-lg sm:rounded-xl border border-white/15 bg-white/5 p-4 sm:p-5 backdrop-blur-sm">
+                    <h3 className="mb-2 sm:mb-3 text-base sm:text-lg font-semibold text-white">
+                      Quick Metrics
+                    </h3>
+                    <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-white/80">
+                      {Object.entries(response.metrics).map(([key, value]) => (
+                        <li key={key} className="flex justify-between gap-3">
+                          <span className="font-medium capitalize">
+                            {key.replace(/_/g, " ")}
+                          </span>
+                          <span className="text-right">
+                            {Array.isArray(value) ? value.join(", ") : value}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="rounded-lg sm:rounded-xl border border-white/15 bg-white/5 p-4 sm:p-5 backdrop-blur-sm">
+                    <h3 className="mb-2 sm:mb-3 text-base sm:text-lg font-semibold text-white">
+                      Essays Scraped
+                    </h3>
+                    <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-white/80">
+                      {response.samples_used.map((sample) => (
+                        <li
+                          key={sample}
+                          className="rounded-lg bg-white/10 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-medium capitalize text-white/90"
+                        >
+                          {sample.replace(/-/g, " ")}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
+      </main>
+    </>
   );
 }

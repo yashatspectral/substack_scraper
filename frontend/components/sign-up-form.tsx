@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import Image from 'next/image'
 
 export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const [email, setEmail] = useState('')
@@ -58,7 +59,18 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
   }
 
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
+    <div>
+      <div>
+          <Image 
+            src="/login-bg-img.jpg" 
+            alt="login bg"
+            fill
+            quality={100} 
+            unoptimized={true} 
+            className="object-cover" 
+          />  
+          <div className="absolute inset-0 bg-black/40" />
+    <div className={cn('relative flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Sign up</CardTitle>
@@ -128,5 +140,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
         </CardContent>
       </Card>
     </div>
+    </div>
+  </div>
   )
 }
